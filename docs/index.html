@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TipJar — Tip anyone by their .ai name</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
+  h1 { font-size: 1.6rem; margin-bottom: 0.2rem; }
+  p.sub { color: #555; margin-top: 0; }
+  .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  label { display: block; font-weight: 600; margin: 0.6rem 0 0.2rem; }
+  input { width: 100%; padding: 0.6rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+  button { padding: 0.7rem 1.2rem; font-size: 1rem; border: none; border-radius: 8px; background: #f0b90b; color: #111; font-weight: 700; cursor: pointer; margin-top: 0.8rem; }
+  button:disabled { background: #ddd; color: #888; cursor: not-allowed; }
+  #status { margin-top: 0.8rem; font-size: 0.95rem; }
+  .mono { font-family: monospace; font-size: 0.85rem; word-break: break-all; }
+  .tip { border-bottom: 1px solid #eee; padding: 0.5rem 0; font-size: 0.95rem; }
+  .muted { color: #666; font-size: 0.9rem; }
+  a { color: #1a73e8; }
+</style>
+</head>
+<body>
+<h1>TipJar</h1>
+<p class="sub">Tip anyone by their Agent ID (.ai) name — no wallet address needed. The name is resolved on-chain, and the BNB goes straight to the name owner.</p>
+
+<div class="card">
+  <button id="connectBtn">Connect Wallet</button>
+  <div id="account" class="muted"></div>
+
+  <label for="nameInput">Recipient Agent ID name</label>
+  <input id="nameInput" type="text" placeholder="e.g. kobong.ai" autocomplete="off">
+
+  <label for="amountInput">Amount (BNB)</label>
+  <input id="amountInput" type="number" step="0.001" min="0.001" placeholder="e.g. 0.01">
+
+  <div id="preview" class="muted"></div>
+  <button id="tipBtn" disabled>Send Tip</button>
+  <div id="status"></div>
+</div>
+
+<div class="card">
+  <h2 style="font-size:1.1rem;margin:0 0 0.5rem;">Recent tips</h2>
+  <div id="tips"><span class="muted">Loading…</span></div>
+</div>
+
+<div class="card">
+  <h2 style="font-size:1.1rem;margin:0 0 0.5rem;">How it works</h2>
+  <p class="muted">TipJar is a smart contract on BNB Chain. When you tip, it looks up the recipient's wallet by asking the Agent ID contract for the owner of <span class="mono">keccak256(name)</span>, then forwards your BNB to that wallet in the same transaction. The contract holds no funds, has no owner, no fees and no withdraw function — there is nothing that can move your money except your own tip.</p>
+  <p class="muted">Contract: <span class="mono" id="contractAddr">–</span><br>
+  Network: <span id="networkName">–</span><br>
+  Agent ID registry: <span class="mono" id="registryAddr">–</span><br>
+  Source: <a href="https://github.com/Hardi24/tip-by-ai" target="_blank" rel="noopener">github.com/Hardi24/tip-by-ai</a></p>
+  <p class="muted">Never share your seed phrase or private key. This page only asks your wallet to confirm the tip transaction — nothing else.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
